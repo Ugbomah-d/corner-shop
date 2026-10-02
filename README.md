@@ -1,5 +1,7 @@
 # Corner Shop
 
+**Live site:** https://corner-shop-ugbomah.vercel.app
+
 A small shop for the HNG15 Lesson 2 individual task. It's built with Next.js 15 (App Router) and uses:
 
 - **Supabase (Postgres)** to store products, orders and order items, with row-level security
@@ -51,8 +53,15 @@ Past orders are listed at `/orders`.
 
 ## Deploying (Vercel)
 
-Add the same environment variables in Vercel. Then add the deployed URL in three places:
+The site is deployed at https://corner-shop-ugbomah.vercel.app. Every push to `master` redeploys it.
 
-- Google Cloud Console → Authorized JavaScript origins
-- Supabase → URL Configuration → Site URL
-- Supabase → URL Configuration → Redirect URLs (`https://your-app.vercel.app/auth/callback`)
+1. Import the GitHub repo on [vercel.com/new](https://vercel.com/new). Paste the contents of `.env.local` into **Environment Variables**, then deploy.
+2. In Supabase → Authentication → URL Configuration:
+   - Set **Site URL** to the production URL. If it stays on localhost, sign-in sends users back to localhost.
+   - Add `https://*-<your-vercel-team>.vercel.app/**` and `http://localhost:3000/**` to **Redirect URLs**. The wildcard covers production and every preview deployment.
+3. In Google Cloud Console → your OAuth client, add the production URL to **Authorized JavaScript origins**.
+4. In Vercel → Settings → Deployment Protection, turn off **Vercel Authentication** so visitors don't hit a Vercel login page.
+
+Use the stable production URL. The `corner-shop-<hash>-….vercel.app` URLs each belong to one deployment and never update.
+
+**Email note:** emails sent from Mailgun's sandbox domain only reach Authorized Recipients, and Gmail usually files them in **Spam** because they fail its DMARC check. To get them into the inbox, verify your own domain in Mailgun and update `MAILGUN_DOMAIN` and `MAILGUN_FROM`.
